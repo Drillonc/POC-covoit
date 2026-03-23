@@ -7,9 +7,8 @@ import jakarta.persistence.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private int id;
+    @Column(name="email")
+    private String email;
 
     @Column(name="first_name")
     private String firstName;
@@ -17,8 +16,8 @@ public class User {
     @Column(name="last_name")
     private String lastName;
 
-    @Column(name="email")
-    private String email;
+    @Column(name="pw")
+    private String pw;
 
 
     // define constructors
@@ -26,20 +25,19 @@ public class User {
 
     }
 
-    public User(String firstName, String lastName, String email) {
+    public User(String email, String firstName, String lastName, String pw) {
+        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.pw = pw;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
         this.email = email;
-    }
-
-    // define getter/setter
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -58,22 +56,21 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPw() {
+        return pw;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPw(String pw) {
+        this.pw = pw;
     }
 
-    // define toString
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
+                ", pw='" + pw + '\'' +
                 '}';
     }
 }

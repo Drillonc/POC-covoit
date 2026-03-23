@@ -3,8 +3,8 @@ package com.poc.capcovoit.dao;
 import com.poc.capcovoit.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
+import java.util.Optional;
 
-    // that's it ... no need to write any code LOL!
-
+public interface UserRepository extends JpaRepository<User, String> {
+    Optional<User> findByEmail(String email);
 }

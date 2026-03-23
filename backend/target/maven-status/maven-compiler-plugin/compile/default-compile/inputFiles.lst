@@ -1,4 +1,7 @@
-C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com.poccapcovoit\capcovoit\CapCovoitApplication.java
-C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com.poccapcovoit\capcovoit\controller\AuthController.java
-C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com.poccapcovoit\capcovoit\dao\UserRepository.java
-C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com.poccapcovoit\capcovoit\entity\User.java
+C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\CapCovoitApplication.java
+C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\config\SecurityConfig.java
+C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\config\WebConfig.java
+C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\controller\AuthController.java
+C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\dao\UserRepository.java
+C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\entity\User.java
+C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\service\CustomUserDetailsService.java
