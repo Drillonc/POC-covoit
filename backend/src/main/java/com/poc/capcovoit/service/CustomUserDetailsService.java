@@ -2,6 +2,7 @@ package com.poc.capcovoit.service;
 
 import com.poc.capcovoit.dao.UserRepository;
 import com.poc.capcovoit.entity.User;
+import com.poc.capcovoit.security.CustomUserDetails;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,15 +17,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.repo = repo;
     }
 
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = repo.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
 
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
-                .password(user.getPw())
-                .roles("USER")
-                .build();
+        return new CustomUserDetails(user);
     }
+
 }

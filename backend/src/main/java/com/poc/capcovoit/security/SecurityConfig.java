@@ -1,5 +1,6 @@
-package com.poc.capcovoit.config;
+package com.poc.capcovoit.security;
 
+import com.poc.capcovoit.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,11 +16,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.http.HttpMethod;
 
-import com.poc.capcovoit.security.DelegatingPasswordEncoder;
-import com.poc.capcovoit.security.JwtAuthenticationFilter;
-import com.poc.capcovoit.security.JwtTokenProvider;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
 import java.util.Arrays;
 
 @Configuration
@@ -28,9 +24,9 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
 
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService) {
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider, CustomUserDetailsService userDetailsService) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userDetailsService = userDetailsService;
     }
@@ -45,6 +41,12 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService);
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -55,9 +57,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/api/login", "/api/register", "/h2-console/**").permitAll()
                 .anyRequest().authenticated()
-            )
-            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService), 
-                    UsernamePasswordAuthenticationFilter.class);
+            ).addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
 

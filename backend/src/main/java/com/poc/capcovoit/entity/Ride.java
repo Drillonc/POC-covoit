@@ -2,6 +2,8 @@ package com.poc.capcovoit.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "ride")
@@ -9,7 +11,7 @@ public class Ride {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(name = "start", nullable = false)
     private String start;
@@ -27,6 +29,17 @@ public class Ride {
     @JoinColumn(name = "driver_email", referencedColumnName = "email")
     private User driver;
 
+    
+    @ManyToMany
+    @JoinTable(
+        name = "ride_participants",
+        joinColumns = @JoinColumn(name = "id"),
+        inverseJoinColumns = @JoinColumn(name = "email"
+        )
+    )
+    private List<User> participants = new ArrayList<>();
+
+
     // Constructors
     public Ride() {}
 
@@ -38,12 +51,13 @@ public class Ride {
         this.driver = driver;
     }
 
+
     // Getters and Setters
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -85,5 +99,12 @@ public class Ride {
 
     public void setDriver(User driver) {
         this.driver = driver;
+    }
+
+    public List<User> getParticipants() {
+        return participants;
+    }
+    public void setParticipants(List<User> participants) {
+        this.participants = participants;
     }
 }

@@ -11,6 +11,8 @@ export interface Ride {
     firstName: string;
     lastName: string;
   };
+  isDriver: boolean;
+  joined: boolean;
 }
 
 export default class RideService {
@@ -27,9 +29,7 @@ export default class RideService {
       method: 'GET',
       headers: this.getAuthHeaders()
     });
-    if (!response.ok) {
-      throw new Error('Failed to fetch rides');
-    }
+    if (!response.ok) throw new Error('Failed to fetch rides');
     return response.json();
   }
 
@@ -38,9 +38,7 @@ export default class RideService {
       method: 'GET',
       headers: this.getAuthHeaders()
     });
-    if (!response.ok) {
-      throw new Error('Failed to fetch my rides');
-    }
+    if (!response.ok) throw new Error('Failed to fetch my rides');
     return response.json();
   }
 
@@ -50,9 +48,9 @@ export default class RideService {
       headers: this.getAuthHeaders(),
       body: JSON.stringify({ start, end, seats, date })
     });
-    if (!response.ok) {
-      throw new Error('Failed to create ride');
-    }
+
+    if (!response.ok) throw new Error('Failed to create ride');
+
     const data = await response.json();
     return data.ride;
   }
@@ -62,8 +60,25 @@ export default class RideService {
       method: 'DELETE',
       headers: this.getAuthHeaders()
     });
-    if (!response.ok) {
-      throw new Error('Failed to delete ride');
-    }
+
+    if (!response.ok) throw new Error('Failed to delete ride');
+  }
+
+  static async joinRide(id: number): Promise<void> {
+    const response = await fetch(`${API_BASE}/rides/${id}/join`, {
+      method: 'POST',
+      headers: this.getAuthHeaders()
+    });
+
+    if (!response.ok) throw new Error('Failed to join ride');
+  }
+
+  static async leaveRide(id: number): Promise<void> {
+    const response = await fetch(`${API_BASE}/rides/${id}/join`, {
+      method: 'DELETE',
+      headers: this.getAuthHeaders()
+    });
+
+    if (!response.ok) throw new Error('Failed to leave ride');
   }
 }

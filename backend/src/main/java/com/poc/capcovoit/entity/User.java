@@ -1,6 +1,8 @@
 package com.poc.capcovoit.entity;
 
 import jakarta.persistence.*;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "user")
@@ -18,6 +20,9 @@ public class User {
 
     @Column(name="pw")
     private String pw;
+
+    @ManyToMany(mappedBy = "participants")
+    private List<Ride> ridesJoined = new ArrayList<>();
 
 
     // define constructors

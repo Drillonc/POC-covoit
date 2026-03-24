@@ -1,11 +1,7 @@
+DROP SCHEMA IF EXISTS `poc-covoit`;
+
 CREATE DATABASE  IF NOT EXISTS `poc-covoit`;
 USE `poc-covoit`;
-
---
--- Table structure for table `user`
---
-DROP TABLE IF EXISTS `ride`;
-DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
   `first_name` varchar(45) DEFAULT NULL,
@@ -45,4 +41,19 @@ INSERT INTO `ride` VALUES
 	(1,'Montbonnot','Grenoble Hotel de ville',3,'2025-11-11 13:23:44','john@gmail.com');
 	
 
-
+CREATE TABLE `ride_participants` (
+  `email` VARCHAR(45) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  
+  PRIMARY KEY (`email`,`id`),
+  
+  KEY `FK_email_idx` (`email`),
+  
+  CONSTRAINT `FK_RIDE` FOREIGN KEY (`id`) 
+  REFERENCES `ride` (`id`) 
+  ON DELETE NO ACTION ON UPDATE NO ACTION,
+  
+  CONSTRAINT `FK_EMAIL` FOREIGN KEY (`email`) 
+  REFERENCES `user` (`email`) 
+  ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

@@ -1,14 +1,15 @@
 package com.poc.capcovoit.controller;
 
-import com.poc.capcovoit.entity.Ride;
+import com.poc.capcovoit.dto.RideDTO;
+import com.poc.capcovoit.entity.User;
+import com.poc.capcovoit.security.CustomUserDetails;
 import com.poc.capcovoit.service.RideService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/rides")
@@ -20,66 +21,87 @@ public class RideController {
         this.rideService = rideService;
     }
 
-    @GetMapping()
-    public ResponseEntity<List<Ride>> getAllRides() {
-        List<Ride> rides = rideService.getAllRides();
+    @GetMapping
+    public ResponseEntity<List<RideDTO>> getAllRides(
+            @AuthenticationPrincipal CustomUserDetails user) {
+
+        String email = user.getUsername();
+        List<RideDTO> rides = rideService.getAllRides(email);
+
         return ResponseEntity.ok(rides);
     }
 
     @GetMapping("/my")
-    public ResponseEntity<List<Ride>> getMyRides(Authentication authentication) {
-        String driverEmail = authentication.getName();
-        List<Ride> rides = rideService.getRidesByDriver(driverEmail);
+    public ResponseEntity<List<RideDTO>> getMyRides(
+            @AuthenticationPrincipal CustomUserDetails user) {
+
+        String email = user.getUsername();
+        List<RideDTO> rides = rideService.getRidesByDriver(email);
+
         return ResponseEntity.ok(rides);
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createRide(
+    public ResponseEntity<RideDTO> createRide(
             @RequestBody CreateRideRequest request,
-            Authentication authentication) {
-        String driverEmail = authentication.getName();
-        try {
-            Ride ride = rideService.createRide(
+            @AuthenticationPrincipal CustomUserDetails user) {
+
+        String email = user.getUsername();
+
+        var ride = rideService.createRide(
                 request.start,
                 request.end,
                 request.seats,
                 LocalDateTime.parse(request.date),
-                driverEmail
-            );
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("ride", ride);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", false);
-            response.put("message", e.getMessage());
-            return ResponseEntity.badRequest().body(response);
-        }
+                email
+        );
+
+        RideDTO dto = rideService.toDTO(ride, email);
+
+        return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> deleteRide(
-            @PathVariable Long id,
-            Authentication authentication) {
-        String driverEmail = authentication.getName();
-        try {
-            rideService.deleteRide(id, driverEmail);
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", false);
-            response.put("message", e.getMessage());
-            return ResponseEntity.badRequest().body(response);
-        }
+    public ResponseEntity<?> deleteRide(
+            @PathVariable int id,
+            @AuthenticationPrincipal CustomUserDetails user) {
+
+        String email = user.getUsername();
+        rideService.deleteRide(id, email);
+
+        return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/{id}/join")
+    public ResponseEntity<?> joinRide(
+            @PathVariable int id,
+            @AuthenticationPrincipal CustomUserDetails user) {
+
+        rideService.joinRide(id, user.getUsername());
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/join")
+    public ResponseEntity<?> leaveRide(
+            @PathVariable int id,
+            @AuthenticationPrincipal CustomUserDetails user) {
+
+        rideService.leaveRide(id, user.getUsername());
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/participants")
+    public List<User> getParticipants(@PathVariable int id) {
+        return rideService.getRideById(id)
+                .orElseThrow(() -> new RuntimeException("Trajet introuvable"))
+                .getParticipants();
+    }
+
 
     public static class CreateRideRequest {
         public String start;
         public String end;
         public Integer seats;
-        public String date; // ISO format: YYYY-MM-DD
+        public String date;
     }
 }

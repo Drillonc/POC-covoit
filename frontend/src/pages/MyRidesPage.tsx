@@ -1,5 +1,6 @@
 import { useState, useEffect, FormEvent } from 'react';
 import RideService, { Ride } from '../services/ride-service';
+import RideCard from '../components/RideCard';
 
 export default function MyRidesPage() {
   const [rides, setRides] = useState<Ride[]>([]);
@@ -57,6 +58,7 @@ export default function MyRidesPage() {
 
   return (
     <div>
+      {/* ---- Bouton afficher formulaire ---- */}
       <div className="row">
         <div className="col s12">
           <button
@@ -68,6 +70,7 @@ export default function MyRidesPage() {
         </div>
       </div>
 
+      {/* ---- Formulaire de création ---- */}
       {showCreateForm && (
         <div className="row">
           <div className="col s12">
@@ -96,6 +99,7 @@ export default function MyRidesPage() {
                     <label htmlFor="end">Arrivée</label>
                   </div>
                 </div>
+
                 <div className="row">
                   <div className="input-field col s6">
                     <input
@@ -119,6 +123,7 @@ export default function MyRidesPage() {
                     <label htmlFor="date">Date et heure</label>
                   </div>
                 </div>
+
                 <button className="btn waves-effect waves-light" type="submit">
                   Créer
                 </button>
@@ -128,30 +133,22 @@ export default function MyRidesPage() {
         </div>
       )}
 
+      {/* ---- Liste de mes trajets ---- */}
       <div className="row">
         <div className="col s12">
           <h5>Mes trajets</h5>
+
           {rides.length === 0 ? (
             <p>Aucun trajet créé.</p>
           ) : (
             <ul className="collection">
-              {rides.map(ride => (
-                <li key={ride.id} className="collection-item">
-                  <div>
-                    <strong>{ride.start} → {ride.end}</strong>
-                    <br />
-                    <span>Date: {new Date(ride.date).toLocaleString()}</span>
-                    <br />
-                    <span>Places: {ride.seats}</span>
-                    <a
-                      href="#!"
-                      className="secondary-content red-text"
-                      onClick={() => handleDelete(ride.id)}
-                    >
-                      <i className="material-icons">delete</i>
-                    </a>
-                  </div>
-                </li>
+              {rides.map((ride) => (
+                <RideCard
+                  key={ride.id}
+                  ride={ride}
+                  showDeleteButton={true}
+                  onDelete={handleDelete}
+                />
               ))}
             </ul>
           )}
