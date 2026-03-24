@@ -11,7 +11,7 @@ public class DelegatingPasswordEncoder implements PasswordEncoder {
 
     @Override
     public String encode(CharSequence rawPassword) {
-        return bcryptEncoder.encode(rawPassword);
+        return "{bcrypt}" +bcryptEncoder.encode(rawPassword);
     }
 
     @Override
