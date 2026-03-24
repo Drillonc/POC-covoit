@@ -2,6 +2,7 @@ package com.poc.capcovoit.controller;
 
 import com.poc.capcovoit.dao.UserRepository;
 import com.poc.capcovoit.entity.User;
+import com.poc.capcovoit.security.JwtTokenProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,17 +23,20 @@ public class AuthController {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public AuthController(UserRepository userRepository,
                           AuthenticationManager authenticationManager,
-                          PasswordEncoder passwordEncoder) {
+                          PasswordEncoder passwordEncoder,
+                          JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     public static class LoginRequest {
-        public String username;
+        public String email;
         public String password;
     }
 
@@ -47,18 +51,21 @@ public class AuthController {
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest request) {
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.username, request.password)
+                    new UsernamePasswordAuthenticationToken(request.email, request.password)
             );
 
-            User user = userRepository.findByEmail(request.username).orElse(null);
+            User user = userRepository.findByEmail(request.email).orElse(null);
             String fullName = (user != null && user.getFirstName() != null && user.getLastName() != null)
                     ? (user.getFirstName() + " " + user.getLastName())
-                    : request.username;
+                    : request.email;
+
+            String token = jwtTokenProvider.generateToken(request.email);
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
-            response.put("user_id", request.username);
+            response.put("user_id", request.email);
             response.put("fullName", fullName);
+            response.put("token", token);
             return ResponseEntity.ok(response);
         } catch (BadCredentialsException e) {
             Map<String, Object> response = new HashMap<>();
@@ -86,8 +93,11 @@ public class AuthController {
 
         userRepository.save(user);
 
+        String token = jwtTokenProvider.generateToken(request.email);
+
         response.put("success", true);
         response.put("email", user.getEmail());
+        response.put("token", token);
         return ResponseEntity.ok(response);
     }
 }

@@ -1,12 +1,12 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useState } from 'react';
-import HelloPage from './pages/HelloPage';
+import DashboardPage from './pages/DashboardPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 
 export default function App() {
   const [storedUser, setStoredUser] = useState<string | null>(
-    localStorage.getItem('capcovoit-user'),
+    localStorage.getItem('capcovoit-displayName'),
   );
 
   return (
@@ -20,8 +20,8 @@ export default function App() {
         element={<RegisterPage />}
       />
       <Route
-        path="/hello"
-        element={storedUser ? <HelloPage /> : <Navigate to="/" replace />}
+        path="/dashboard"
+        element={storedUser ? <DashboardPage /> : <Navigate to="/" replace />}
       />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

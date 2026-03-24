@@ -1,7 +1,14 @@
 C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\CapCovoitApplication.java
 C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\config\SecurityConfig.java
-C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\config\WebConfig.java
 C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\controller\AuthController.java
+C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\controller\RideController.java
+C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\dao\RideRepository.java
 C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\dao\UserRepository.java
+C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\entity\Ride.java
 C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\entity\User.java
+C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\security\DelegatingPasswordEncoder.java
+C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\security\JwtAuthenticationFilter.java
+C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\security\JwtTokenProvider.java
 C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\service\CustomUserDetailsService.java
+C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\service\RideService.java
+C:\Users\cdrillon\OneDrive - Capgemini\Documents\POC-covoit\backend\src\main\java\com\poc\capcovoit\service\UserDetailsService.java

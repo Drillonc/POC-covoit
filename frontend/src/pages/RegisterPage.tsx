@@ -16,6 +16,8 @@ export default function RegisterPage() {
 
     const success = await AuthenticationService.register(email, firstName, lastName, password);
     if (success) {
+      const displayName = `${firstName} ${lastName}`;
+      localStorage.setItem('capcovoit-displayName', displayName);
       navigate('/');
       return;
     }
@@ -23,62 +25,66 @@ export default function RegisterPage() {
     setError('Impossible de créer le compte. Email déjà utilisé ou données invalides.');
   };
   return (
-    <div className="container d-flex align-items-center justify-content-center min-vh-100">
-      <div className="card shadow-sm p-4" style={{ width: '100%', maxWidth: 420 }}>
-        <h1 className="h4 mb-4 text-center">Créer un compte</h1>
+    <div className="container" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="card-panel" style={{ width: '100%', maxWidth: '400px', padding: '20px' }}>
+        <h4 className="center-align">Créer un compte</h4>
 
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Email</label>
+          <div className="input-field">
             <input
+              id="email"
               type="email"
-              className="form-control"
+              className="validate"
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
             />
+            <label htmlFor="email">Email</label>
           </div>
 
-          <div className="mb-3">
-            <label className="form-label">Prénom</label>
+          <div className="input-field">
             <input
+              id="firstName"
               type="text"
-              className="form-control"
+              className="validate"
               value={firstName}
               onChange={e => setFirstName(e.target.value)}
               required
             />
+            <label htmlFor="firstName">Prénom</label>
           </div>
 
-          <div className="mb-3">
-            <label className="form-label">Nom</label>
+          <div className="input-field">
             <input
+              id="lastName"
               type="text"
-              className="form-control"
+              className="validate"
               value={lastName}
               onChange={e => setLastName(e.target.value)}
               required
             />
+            <label htmlFor="lastName">Nom</label>
           </div>
 
-          <div className="mb-3">
-            <label className="form-label">Mot de passe</label>
+          <div className="input-field">
             <input
+              id="password"
               type="password"
-              className="form-control"
+              className="validate"
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
             />
+            <label htmlFor="password">Mot de passe</label>
           </div>
 
-          {error && <div className="alert alert-danger">{error}</div>}
-          <button className="btn btn-success w-100" type="submit">
+          {error && <div className="card-panel red lighten-4 red-text text-darken-2">{error}</div>}
+          <button className="btn waves-effect waves-light" type="submit" style={{ width: '100%' }}>
             S'inscrire
           </button>
         </form>
 
-        <p className="text-center mt-3">
+        <p className="center-align" style={{ marginTop: '20px' }}>
           Déjà membre ? <a href="/">Se connecter</a>
         </p>
       </div>

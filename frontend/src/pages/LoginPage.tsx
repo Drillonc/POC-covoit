@@ -7,7 +7,7 @@ interface LoginPageProps {
 }
 
 export default function LoginPage({ onLogin }: LoginPageProps) {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -17,64 +17,67 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
     event.preventDefault();
     setError(null);
 
-    const result = await AuthenticationService.login(username, password);
+    const result = await AuthenticationService.login(email, password);
     console.log('Login result:', result);
     if (result.success) {
-      const displayName = result.fullName || username;
-      localStorage.setItem('capcovoit-user', displayName);
+      const displayName = result.fullName || email;
+      localStorage.setItem('capcovoit-displayName', displayName);
       onLogin(displayName);
-      navigate('/hello');
+      navigate('/dashboard');
       return;
     }
 
-    setError('Nom d\'utilisateur ou mot de passe incorrect');
+    setError('Email ou mot de passe incorrect');
   };
   return (
-    <div className="container d-flex align-items-center justify-content-center min-vh-100">
-      <div className="card shadow-sm p-4" style={{ width: '100%', maxWidth: 420 }}>
-        <h1 className="h4 mb-4 text-center">Connexion</h1>
+    <div className="container" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="card-panel" style={{ width: '100%', maxWidth: '400px', padding: '20px' }}>
+        <h4 className="center-align">Connexion</h4>
 
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Email</label>
+          <div className="input-field">
             <input
+              id="email"
               type="email"
-              className="form-control"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
+              className="validate"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
               required
               autoFocus
             />
+            <label htmlFor="email">Email</label>
           </div>
 
-          <div className="mb-3">
-            <label className="form-label">Mot de passe</label>
-            <div className="input-group">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                className="form-control"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                className="btn btn-outline-secondary"
-                onClick={() => setShowPassword(prev => !prev)}
-              >
-                {showPassword ? 'Cacher' : 'Afficher'}
-              </button>
-            </div>
+          <div className="input-field">
+            <input
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              className="validate"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+            />
+            <label htmlFor="password">Mot de passe</label>
+            <span className="helper-text">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={showPassword}
+                  onChange={() => setShowPassword(prev => !prev)}
+                />
+                <span>Afficher le mot de passe</span>
+              </label>
+            </span>
           </div>
 
-          {error && <div className="alert alert-danger">{error}</div>}
+          {error && <div className="card-panel red lighten-4 red-text text-darken-2">{error}</div>}
 
-          <button className="btn btn-primary w-100" type="submit">
+          <button className="btn waves-effect waves-light" type="submit" style={{ width: '100%' }}>
             Se connecter
           </button>
         </form>
 
-        <p className="text-center mt-3">
+        <p className="center-align" style={{ marginTop: '20px' }}>
           Pas encore de compte ? <Link to="/register">S'inscrire</Link>
         </p>
       </div>

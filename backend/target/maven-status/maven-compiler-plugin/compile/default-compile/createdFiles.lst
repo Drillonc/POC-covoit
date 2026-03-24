@@ -1,5 +1,2 @@
-com\poccapcovoit\capcovoit\CapCovoitApplication.class
-com\capcovoit\controller\AuthController$LoginRequest.class
-com\capcovoit\entity\User.class
-com\capcovoit\controller\AuthController.class
-com\capcovoit\dao\UserRepository.class
+com\poc\capcovoit\config\SecurityConfig.class
+com\poc\capcovoit\CapCovoitApplication.class
