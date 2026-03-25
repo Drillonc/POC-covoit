@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import RideService, { Ride } from '../services/ride-service';
 import RideCard from '../components/RideCard';
 
+// Page pour afficher tous les trajets disponibles
 export default function AllRidesPage() {
   const [rides, setRides] = useState<Ride[]>([]);
   const [loading, setLoading] = useState(true);

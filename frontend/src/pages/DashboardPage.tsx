@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import MyRidesPage from './MyRidesPage';
 import AllRidesPage from './AllRidesPage';
 
+// Page principale du dashboard avec les onglets pour les trajets personnels et tous les trajets
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<'my' | 'all'>('my');
   const navigate = useNavigate();
   const displayName = localStorage.getItem('capcovoit-displayName') || 'Utilisateur';
 
   useEffect(() => {
-    // Initialize Materialize tabs
     const tabs = document.querySelectorAll('.tabs');
     if (tabs.length > 0) {
       // @ts-ignore
@@ -29,7 +29,7 @@ export default function DashboardPage() {
       <nav className="nav-wrapper">
         <div className="container">
           <a href="#" className="brand-logo"><img src="../../assets/Capgemini_Primary-spade_Capgemini-white.png" alt="logo" className="photo" width="60" height="60"/>CapCovoit</a>
-          <ul id="nav-mobile" className="right hide-on-med-and-down">
+          <ul id="nav-mobile" className="right">
             <li><span>Bonjour {displayName}</span></li>
             <li><a onClick={logout} style={{ cursor: 'pointer' }}>Déconnexion</a></li>
           </ul>

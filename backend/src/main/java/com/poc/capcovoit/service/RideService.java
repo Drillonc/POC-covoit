@@ -13,6 +13,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/*
+ * Nom de classe : RideService
+ *
+ * Description   : Cette classe fournit les services liés aux trajets, tels que la création, la suppression, l'inscription et la désinscription des trajets, ainsi que la conversion des entités Ride en DTO pour les réponses API.
+ *
+ */
 @Service
 public class RideService {
 
@@ -24,6 +30,7 @@ public class RideService {
         this.userRepository = userRepository;
     }
 
+    // Méthode pour récupérer tous les trajets, en convertissant les entités Ride en DTO pour inclure les informations du conducteur et des passagers
     public List<RideDTO> getAllRides(String currentUserEmail) {
         return rideRepository.findAll()
                 .stream()
@@ -31,7 +38,7 @@ public class RideService {
                 .toList();
     }
 
-
+    // Méthode pour récupérer les trajets d'un conducteur spécifique, en utilisant l'email du conducteur pour filtrer les trajets
     public List<RideDTO> getRidesByDriver(String email) {
         return rideRepository.findByDriverEmail(email)
                 .stream()
@@ -39,6 +46,7 @@ public class RideService {
                 .toList();
     }
 
+    // Méthode pour créer un nouveau trajet en associant le conducteur à partir de son email et en sauvegardant le trajet dans la base de données
     @Transactional
     public Ride createRide(String start, String end, Integer seats, LocalDateTime date, String driverEmail) {
 
@@ -55,6 +63,7 @@ public class RideService {
         return rideRepository.save(ride);
     }
 
+    // Méthode pour supprimer un trajet en vérifiant que l'utilisateur qui effectue la suppression est bien le conducteur du trajet
     public void deleteRide(int id, String email) {
         Ride ride = rideRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Trajet introuvable"));
@@ -66,6 +75,7 @@ public class RideService {
         rideRepository.delete(ride);
     }
 
+    // Méthode pour permettre à un utilisateur de s'inscrire à un trajet en vérifiant la disponibilité des places et en mettant à jour la liste des participants et le nombre de places restantes
     @Transactional
     public void joinRide(int rideId, String email) {
         Ride ride = rideRepository.findById(rideId)
@@ -75,7 +85,7 @@ public class RideService {
                 .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
 
         if (ride.getParticipants().contains(user)) {
-            return; // déjà inscrit
+            return;
         }
 
         if (ride.getSeats() <= 0) {
@@ -88,6 +98,7 @@ public class RideService {
         rideRepository.save(ride);
     }
 
+    // Méthode pour permettre à un utilisateur de se désinscrire d'un trajet en vérifiant que l'utilisateur est bien inscrit au trajet et qu'il n'est pas le conducteur, puis en mettant à jour la liste des participants et le nombre de places restantes
     @Transactional
     public void leaveRide(int rideId, String email) {
         Ride ride = rideRepository.findById(rideId)
@@ -97,10 +108,10 @@ public class RideService {
                 .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
 
         if (!ride.getParticipants().contains(user)) {
-            return; // pas inscrit
+            return;
         }
 
-        // empêcher le driver de se désinscrire
+        // Un conducteur ne peut pas se désinscrire de son propre trajet
         if (ride.getDriver().getEmail().equals(email)) {
             throw new RuntimeException("Le conducteur ne peut pas se désinscrire de son propre trajet");
         }
@@ -111,12 +122,14 @@ public class RideService {
         rideRepository.save(ride);
     }
 
+    // Méthode pour récupérer un trajet par son ID, utilisée notamment pour afficher les détails d'un trajet ou la liste de ses participants
     public Optional<Ride> getRideById(int id) {
         return rideRepository.findById(id);
     }
 
+    // Méthode pour convertir une entité Ride en DTO RideDTO, en incluant les informations du conducteur, des passagers et l'état d'inscription de l'utilisateur courant
     public RideDTO toDTO(Ride ride, String currentUserEmail) {
-
+        // Création d'un DTO pour le trajet en copiant les propriétés de base
         RideDTO dto = new RideDTO();
         dto.id = ride.getId();
         dto.start = ride.getStart();
@@ -124,6 +137,7 @@ public class RideService {
         dto.date = ride.getDate();
         dto.seats = ride.getSeats();
 
+        // Création d'un DTO pour le conducteur en copiant les informations de l'entité User associée au conducteur du trajet
         User modelDriver = ride.getDriver();
         UserDTO driver = new UserDTO();
         driver.email = modelDriver.getEmail();
@@ -131,12 +145,13 @@ public class RideService {
         driver.lastName = modelDriver.getLastName();
         dto.driver = driver;
 
+        // Booléen pour savoir si l'utilisateur courant est le conducteur du trajet
         dto.isDriver = modelDriver.getEmail().equals(currentUserEmail);
 
+        // Création d'une liste de DTO pour les passagers du trajet
         List<User> modelPassengers = ride.getParticipants();
         dto.passengers = modelPassengers
                 .stream()
-                .filter(u -> !u.getEmail().equals(modelDriver.getEmail())) // exclure le driver
                 .map(u -> {
                     UserDTO p = new UserDTO();
                     p.email = u.getEmail();
@@ -145,6 +160,8 @@ public class RideService {
                     return p;
                 })
                 .toList();
+
+        // Booléen pour savoir si l'utilisateur courant est inscrit au trajet en tant que passager
         dto.joined = modelPassengers
                 .stream()
                 .anyMatch(u -> u.getEmail().equals(currentUserEmail));
@@ -152,6 +169,7 @@ public class RideService {
         return dto;
     }
 
+    // Méthode pour récupérer les trajets auxquels un utilisateur est inscrit
     public List<RideDTO> getRidesByParticipant(String email) {
         return rideRepository.findByParticipantEmail(email)
                 .stream()

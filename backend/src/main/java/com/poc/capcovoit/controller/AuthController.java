@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+ * Nom de classe : AuthController
+ *
+ * Description   : Ce contrôleur gère les opérations d'authentification et d'inscription des utilisateurs. Il créé des endpoints pour permettre aux utilisateurs de se connecter et de s'inscrire, en utilisant JWT pour la gestion des sessions.
+ *
+ */
 @RestController
 @RequestMapping("/api")
 public class AuthController {
@@ -47,6 +53,7 @@ public class AuthController {
         public String password;
     }
 
+    // Endpoint pour la connexion des utilisateurs
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest request) {
         try {
@@ -75,6 +82,7 @@ public class AuthController {
         }
     }
 
+    // Endpoint pour l'inscription des utilisateurs
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody RegisterRequest request) {
         Map<String, Object> response = new HashMap<>();

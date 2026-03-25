@@ -6,6 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
+/*
+ * Nom de classe : RideRepository
+ *
+ * Description   : Ce repository gère les opérations CRUD sur les trajets.
+ *
+ */
 public interface RideRepository extends JpaRepository<Ride, Integer> {
     List<Ride> findByDriverEmail(String driverEmail);
 

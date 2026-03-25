@@ -18,6 +18,12 @@ import org.springframework.http.HttpMethod;
 
 import java.util.Arrays;
 
+/*
+ * Nom de classe : SecurityConfig
+ *
+ * Description   : Cette classe configure la sécurité de l'application en définissant les règles d'authentification et d'autorisation, ainsi que les filtres de sécurité pour les requêtes HTTP.
+ *
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -47,6 +53,7 @@ public class SecurityConfig {
         return new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService);
     }
 
+    // Configuration de la chaîne de filtres de sécurité pour les requêtes HTTP
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -64,6 +71,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // Configuration CORS pour permettre les requêtes depuis le frontend
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfg = new CorsConfiguration();

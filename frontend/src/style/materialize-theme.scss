@@ -1,6 +1,5 @@
 
 // Override des couleurs Materialize
-
 $primary-color: #0058AB;
 $primary-color-light: lighten($primary-color, 15%);
 $primary-color-dark: darken($primary-color, 15%);
@@ -18,5 +17,4 @@ $link-color: $primary-color;
 $roboto-font-path: "";
 $font-family-sans-serif: "Ubuntu", sans-serif;
 
-// Import du framework Materialize
 @import "materialize-css/sass/materialize";

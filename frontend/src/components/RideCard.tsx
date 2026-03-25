@@ -1,6 +1,7 @@
 import React from "react";
 import { Ride } from "../services/ride-service";
 
+// Composant pour afficher les détails d'un trajet et les actions possibles (s'inscrire, se désinscrire, supprimer)
 interface RideCardProps {
   ride: Ride;
   onJoin?: (rideId: number) => void;
@@ -26,7 +27,7 @@ export default function RideCard({
         <span>Places disponibles : {ride.seats}</span>
         <br/>
         <span>Passagers : {ride.passengers.map(p => `${p.firstName} ${p.lastName}`).join(', ') || 'Pas encore de passagers'}</span>
-
+        {/* Si on est le conducteur, on affiche un bouton pour supprimer le trajet. Si on est un passager inscrit, on affiche un bouton pour se désinscrire. Sinon, si des places sont disponibles, on affiche un bouton pour s'inscrire. */}
         <div style={{ marginTop: "10px" }}>
           {ride.isDriver ? (
             <button className="btn red" onClick={() => onDelete?.(ride.id)}>

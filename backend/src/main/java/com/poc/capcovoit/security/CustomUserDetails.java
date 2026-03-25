@@ -7,6 +7,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+/*
+ * Nom de classe : CustomUserDetails
+ *
+ * Description   : Cette classe implémente l'interface UserDetails pour fournir les détails de l'utilisateur à la sécurité Spring.
+ *
+ */
 public class CustomUserDetails implements UserDetails {
 
     private final User user;

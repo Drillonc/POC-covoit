@@ -6,6 +6,7 @@ interface LoginPageProps {
   onLogin: (username: string) => void;
 }
 
+// Page de connexion avec formulaire pour email et mot de passe
 export default function LoginPage({ onLogin }: LoginPageProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

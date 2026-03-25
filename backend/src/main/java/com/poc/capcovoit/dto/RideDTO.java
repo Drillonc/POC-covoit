@@ -3,6 +3,12 @@ package com.poc.capcovoit.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/*
+ * Nom de classe : RideDTO
+ *
+ * Description   : Cette classe représente un trajet dans le système.
+ *
+ */
 public class RideDTO {
     public int id;
     public String start;

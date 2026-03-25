@@ -1,5 +1,11 @@
 const API_BASE = 'http://localhost:8080/api';
 
+/*
+ * Nom de classe : AuthenticationService
+ *
+ * Description   : Service pour gérer l'authentification de l'utilisateur, y compris la connexion, l'inscription et la déconnexion.
+ *
+ */
 export default class AuthenticationService {
   static isAuthenticated = false;
   static userId: string | null = null;
@@ -13,6 +19,7 @@ export default class AuthenticationService {
     };
   }
 
+  // Méthode pour se connecter avec email et mot de passe
   static async login(email: string, password: string): Promise<{ success: boolean; fullName?: string }> {
     console.log('Attempting login with:', { email, password });
     try {
@@ -43,6 +50,7 @@ export default class AuthenticationService {
     }
   }
 
+  // Méthode pour s'inscrire avec email, prénom, nom et mot de passe
   static async register(
     email: string,
     firstName: string,
@@ -81,6 +89,7 @@ export default class AuthenticationService {
     }
   }
 
+  // Méthode pour se déconnecter
   static logout() {
     this.isAuthenticated = false;
     this.userId = null;

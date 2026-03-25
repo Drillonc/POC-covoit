@@ -5,6 +5,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Nom de classe : Ride
+ *
+ * Description   : Cette classe représente un trajet dans le système.
+ *
+ */
 @Entity
 @Table(name = "ride")
 public class Ride {
@@ -40,7 +46,6 @@ public class Ride {
     private List<User> participants = new ArrayList<>();
 
 
-    // Constructors
     public Ride() {}
 
     public Ride(String start, String end, Integer seats, LocalDateTime date, User driver) {
@@ -51,8 +56,6 @@ public class Ride {
         this.driver = driver;
     }
 
-
-    // Getters and Setters
     public int getId() {
         return id;
     }

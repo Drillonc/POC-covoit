@@ -4,6 +4,12 @@ import jakarta.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
 
+/*
+ * Nom de classe : User
+ *
+ * Description   : Cette classe représente un utilisateur dans le système.
+ *
+ */
 @Entity
 @Table(name = "user")
 public class User {
@@ -24,8 +30,6 @@ public class User {
     @ManyToMany(mappedBy = "participants")
     private List<Ride> ridesJoined = new ArrayList<>();
 
-
-    // define constructors
     public User() {
 
     }

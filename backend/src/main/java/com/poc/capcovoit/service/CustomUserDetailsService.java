@@ -8,6 +8,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/*
+ * Nom de classe : CustomUserDetailsService
+ *
+ * Description   : Cette classe implémente l'interface UserDetailsService pour fournir une implémentation personnalisée de la méthode loadUserByUsername, qui est utilisée par Spring Security pour charger les détails de l'utilisateur à partir de la base de données.
+ *
+ */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -17,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.repo = repo;
     }
 
-
+    // Méthode pour charger les détails de l'utilisateur à partir de la base de données en utilisant l'email comme identifiant
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = repo.findByEmail(email)

@@ -2,6 +2,7 @@ import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthenticationService from '../services/authentication-service';
 
+// Page d'inscription avec formulaire pour email, prénom, nom et mot de passe
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');

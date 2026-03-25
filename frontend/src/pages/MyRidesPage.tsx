@@ -2,6 +2,7 @@ import { useState, useEffect, FormEvent } from 'react';
 import RideService, { Ride } from '../services/ride-service';
 import RideCard from '../components/RideCard';
 
+// Page pour afficher les trajets créés par l'utilisateur et les trajets auxquels il est inscrit
 export default function MyRidesPage() {
   const [myRides, setMyRides] = useState<Ride[]>([]);
   const [joinedRides, setJoinedRides] = useState<Ride[]>([]);

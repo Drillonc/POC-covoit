@@ -9,6 +9,12 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+/*
+ * Nom de classe : JwtTokenProvider
+ *
+ * Description   : Cette classe est responsable de la génération, de l'extraction et de la validation des tokens JWT utilisés pour l'authentification des utilisateurs dans le système.
+ *
+ */
 @Component
 public class JwtTokenProvider {
 
@@ -18,6 +24,7 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration:86400000}")
     private long jwtExpirationMs;
 
+    // Méthode pour générer un token JWT à partir de l'email de l'utilisateur
     public String generateToken(String email) {
         SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
         return Jwts.builder()
@@ -28,6 +35,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    // Méthode pour extraire l'email de l'utilisateur à partir du token JWT
     public String getEmailFromToken(String token) {
         SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
         Claims claims = Jwts.parser()
@@ -38,6 +46,7 @@ public class JwtTokenProvider {
         return claims.getSubject();
     }
 
+    // Méthode pour valider le token JWT en vérifiant sa signature et sa date d'expiration
     public boolean validateToken(String token) {
         try {
             SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
