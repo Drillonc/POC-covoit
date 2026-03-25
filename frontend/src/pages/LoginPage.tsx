@@ -32,6 +32,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
   return (
     <div className="container" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div className="card-panel" style={{ width: '100%', maxWidth: '400px', padding: '20px' }}>
+        <img src="../../assets/Capgemini_Primary-logo_Capgemini-Blue.png" alt="logo" className="logo-centered" height="60"/>
         <h4 className="center-align">Connexion</h4>
 
         <form onSubmit={handleSubmit}>

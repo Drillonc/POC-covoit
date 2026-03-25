@@ -26,9 +26,9 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <nav className="nav-wrapper teal">
+      <nav className="nav-wrapper">
         <div className="container">
-          <a href="#" className="brand-logo">CapCovoit</a>
+          <a href="#" className="brand-logo"><img src="../../assets/Capgemini_Primary-spade_Capgemini-white.png" alt="logo" className="photo" width="60" height="60"/>CapCovoit</a>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
             <li><span>Bonjour {displayName}</span></li>
             <li><a onClick={logout} style={{ cursor: 'pointer' }}>Déconnexion</a></li>

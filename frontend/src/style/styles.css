@@ -71,3 +71,12 @@ button:hover {
   color: var(--danger);
   font-weight: 600;
 }
+
+
+.nav-wrapper .brand-logo img {
+  vertical-align: middle;}
+
+.logo-centered {
+  display: block;
+  margin: auto;
+}
