@@ -41,6 +41,16 @@ public class RideController {
         return ResponseEntity.ok(rides);
     }
 
+    @GetMapping("/joined")
+    public ResponseEntity<List<RideDTO>> getJoinedRides(
+            @AuthenticationPrincipal CustomUserDetails user) {
+
+        String email = user.getUsername();
+        List<RideDTO> rides = rideService.getRidesByParticipant(email);
+
+        return ResponseEntity.ok(rides);
+    }
+
     @PostMapping
     public ResponseEntity<RideDTO> createRide(
             @RequestBody CreateRideRequest request,

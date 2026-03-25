@@ -13,6 +13,11 @@ export interface Ride {
   };
   isDriver: boolean;
   joined: boolean;
+  passengers: {
+    email: string;
+    firstName: string;
+    lastName: string;
+  }[];
 }
 
 export default class RideService {
@@ -41,6 +46,16 @@ export default class RideService {
     if (!response.ok) throw new Error('Failed to fetch my rides');
     return response.json();
   }
+
+  static async getJoinedRides(): Promise<Ride[]> {
+    const response = await fetch(`${API_BASE}/rides/joined`, {
+      method: 'GET',
+      headers: this.getAuthHeaders()
+    });
+    if (!response.ok) throw new Error('Failed to fetch joined rides');
+    return response.json();
+  }
+
 
   static async createRide(start: string, end: string, seats: number, date: string): Promise<Ride> {
     const response = await fetch(`${API_BASE}/rides`, {

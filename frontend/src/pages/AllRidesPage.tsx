@@ -58,7 +58,6 @@ const handleDelete = async (rideId: number) => {
                 <RideCard
                   key={ride.id}
                   ride={ride}
-                  showJoinButton={true}
                   onJoin={handleJoin}
                   onLeave={handleLeave}
                   onDelete={handleDelete}

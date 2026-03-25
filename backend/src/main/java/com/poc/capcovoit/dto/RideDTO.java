@@ -1,6 +1,7 @@
 package com.poc.capcovoit.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class RideDTO {
     public int id;
@@ -9,8 +10,10 @@ public class RideDTO {
     public LocalDateTime date;
     public int seats;
 
-    public DriverDTO driver;
+    public UserDTO driver;
 
     public boolean isDriver;
     public boolean joined;
+
+    public List<UserDTO> passengers;
 }

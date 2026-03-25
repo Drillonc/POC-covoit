@@ -1,7 +1,7 @@
 package com.poc.capcovoit.service;
 
-import com.poc.capcovoit.dto.DriverDTO;
 import com.poc.capcovoit.dto.RideDTO;
+import com.poc.capcovoit.dto.UserDTO;
 import com.poc.capcovoit.entity.Ride;
 import com.poc.capcovoit.entity.User;
 import com.poc.capcovoit.dao.RideRepository;
@@ -24,9 +24,6 @@ public class RideService {
         this.userRepository = userRepository;
     }
 
-    // ------------------------------------------------------
-    // GET ALL RIDES (DTO)
-    // ------------------------------------------------------
     public List<RideDTO> getAllRides(String currentUserEmail) {
         return rideRepository.findAll()
                 .stream()
@@ -34,9 +31,7 @@ public class RideService {
                 .toList();
     }
 
-    // ------------------------------------------------------
-    // GET MY RIDES (DTO)
-    // ------------------------------------------------------
+
     public List<RideDTO> getRidesByDriver(String email) {
         return rideRepository.findByDriverEmail(email)
                 .stream()
@@ -56,9 +51,6 @@ public class RideService {
         ride.setSeats(seats);
         ride.setDate(date);
         ride.setDriver(driver);
-
-        // Inscription automatique du conducteur (sans consommer de place)
-        ride.getParticipants().add(driver);
 
         return rideRepository.save(ride);
     }
@@ -132,19 +124,38 @@ public class RideService {
         dto.date = ride.getDate();
         dto.seats = ride.getSeats();
 
-        // driver
-        DriverDTO driver = new DriverDTO();
-        driver.email = ride.getDriver().getEmail();
-        driver.firstName = ride.getDriver().getFirstName();
-        driver.lastName = ride.getDriver().getLastName();
+        User modelDriver = ride.getDriver();
+        UserDTO driver = new UserDTO();
+        driver.email = modelDriver.getEmail();
+        driver.firstName = modelDriver.getFirstName();
+        driver.lastName = modelDriver.getLastName();
         dto.driver = driver;
 
-        dto.isDriver = ride.getDriver().getEmail().equals(currentUserEmail);
+        dto.isDriver = modelDriver.getEmail().equals(currentUserEmail);
 
-        dto.joined = ride.getParticipants()
+        List<User> modelPassengers = ride.getParticipants();
+        dto.passengers = modelPassengers
+                .stream()
+                .filter(u -> !u.getEmail().equals(modelDriver.getEmail())) // exclure le driver
+                .map(u -> {
+                    UserDTO p = new UserDTO();
+                    p.email = u.getEmail();
+                    p.firstName = u.getFirstName();
+                    p.lastName = u.getLastName();
+                    return p;
+                })
+                .toList();
+        dto.joined = modelPassengers
                 .stream()
                 .anyMatch(u -> u.getEmail().equals(currentUserEmail));
 
         return dto;
+    }
+
+    public List<RideDTO> getRidesByParticipant(String email) {
+        return rideRepository.findByParticipantEmail(email)
+                .stream()
+                .map(ride -> toDTO(ride, email))
+                .toList();
     }
 }

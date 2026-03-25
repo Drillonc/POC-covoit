@@ -3,7 +3,8 @@ import RideService, { Ride } from '../services/ride-service';
 import RideCard from '../components/RideCard';
 
 export default function MyRidesPage() {
-  const [rides, setRides] = useState<Ride[]>([]);
+  const [myRides, setMyRides] = useState<Ride[]>([]);
+  const [joinedRides, setJoinedRides] = useState<Ride[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -19,8 +20,11 @@ export default function MyRidesPage() {
   const loadRides = async () => {
     try {
       setLoading(true);
-      const data = await RideService.getMyRides();
-      setRides(data);
+      const mydata = await RideService.getMyRides();
+      setMyRides(mydata);
+      const joineddata = await RideService.getJoinedRides();
+      setJoinedRides(joineddata);
+
     } catch (err) {
       setError('Erreur lors du chargement des trajets');
     } finally {
@@ -58,7 +62,6 @@ export default function MyRidesPage() {
 
   return (
     <div>
-      {/* ---- Bouton afficher formulaire ---- */}
       <div className="row">
         <div className="col s12">
           <button
@@ -69,8 +72,7 @@ export default function MyRidesPage() {
           </button>
         </div>
       </div>
-
-      {/* ---- Formulaire de création ---- */}
+    
       {showCreateForm && (
         <div className="row">
           <div className="col s12">
@@ -133,21 +135,38 @@ export default function MyRidesPage() {
         </div>
       )}
 
-      {/* ---- Liste de mes trajets ---- */}
       <div className="row">
         <div className="col s12">
           <h5>Mes trajets</h5>
 
-          {rides.length === 0 ? (
+          {myRides.length === 0 ? (
             <p>Aucun trajet créé.</p>
           ) : (
             <ul className="collection">
-              {rides.map((ride) => (
+              {myRides.map((ride) => (
                 <RideCard
                   key={ride.id}
                   ride={ride}
-                  showDeleteButton={true}
                   onDelete={handleDelete}
+                />
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col s12">
+          <h5>Mes inscriptions</h5>
+
+          {joinedRides.length === 0 ? (
+            <p>Aucune inscription</p>
+          ) : (
+            <ul className="collection">
+              {joinedRides.map((ride) => (
+                <RideCard
+                  key={ride.id}
+                  ride={ride}
                 />
               ))}
             </ul>

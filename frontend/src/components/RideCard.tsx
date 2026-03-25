@@ -3,9 +3,6 @@ import { Ride } from "../services/ride-service";
 
 interface RideCardProps {
   ride: Ride;
-  showJoinButton?: boolean;
-  showLeaveButton?: boolean;
-  showDeleteButton?: boolean;
   onJoin?: (rideId: number) => void;
   onLeave?: (rideId: number) => void;
   onDelete?: (rideId: number) => void;
@@ -27,6 +24,8 @@ export default function RideCard({
         <span>Date : {new Date(ride.date).toLocaleString()}</span>
         <br />
         <span>Places disponibles : {ride.seats}</span>
+        <br/>
+        <span>Passagers : {ride.passengers.map(p => `${p.firstName} ${p.lastName}`).join(', ') || 'Pas encore de passagers'}</span>
 
         <div style={{ marginTop: "10px" }}>
           {ride.isDriver ? (
@@ -37,11 +36,11 @@ export default function RideCard({
             <button className="btn orange" onClick={() => onLeave?.(ride.id)}>
               Se désinscrire
             </button>
-          ) : (
+          ) : ride.seats > 0 ? (
             <button className="btn green" onClick={() => onJoin?.(ride.id)}>
               S’inscrire
             </button>
-          )}
+          ): null}
         </div>
       </div>
     </li>
