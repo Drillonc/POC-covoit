@@ -20,6 +20,7 @@ public class RideDTO {
 
     public boolean isDriver;
     public boolean joined;
+    public boolean isPassed;
 
     public List<UserDTO> passengers;
 }

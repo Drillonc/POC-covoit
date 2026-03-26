@@ -9,6 +9,7 @@ const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiZHJpbGxvbmMiLCJhIjoiY21uNzl6b2JiMDVwZDJw
 export default function MyRidesPage() {
   const [myRides, setMyRides] = useState<Ride[]>([]);
   const [joinedRides, setJoinedRides] = useState<Ride[]>([]);
+  const [passedRides, setPassedRides] = useState<Ride[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -28,6 +29,8 @@ export default function MyRidesPage() {
       setMyRides(mydata);
       const joineddata = await RideService.getJoinedRides();
       setJoinedRides(joineddata);
+      const passeddata = await RideService.getPassedRides();
+      setPassedRides(passeddata);
 
     } catch (err) {
       setError('Erreur lors du chargement des trajets');
@@ -101,7 +104,7 @@ export default function MyRidesPage() {
                         setStart(formatted);
                       }}
                     />
-
+                    <label>Départ</label>
                   </div>
                   <div className="input-field col s6">
 
@@ -120,7 +123,9 @@ export default function MyRidesPage() {
                         setEnd(formatted);
                       }}
                     />
+                    <label>Arrivée</label>
                   </div>
+
                 </div>
 
                 <div className="row">
@@ -143,7 +148,7 @@ export default function MyRidesPage() {
                       onChange={e => setDate(e.target.value)}
                       required
                     />
-                    <label htmlFor="date">Date et heure</label>
+                    <label htmlFor="date" >Date et heure</label>
                   </div>
                 </div>
 
@@ -185,6 +190,25 @@ export default function MyRidesPage() {
           ) : (
             <ul className="collection">
               {joinedRides.map((ride) => (
+                <RideCard
+                  key={ride.id}
+                  ride={ride}
+                />
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col s12">
+          <h5>Mes trajets passés</h5>
+
+          {passedRides.length === 0 ? (
+            <p>Aucun trajet passé</p>
+          ) : (
+            <ul className="collection">
+              {passedRides.map((ride) => (
                 <RideCard
                   key={ride.id}
                   ride={ride}

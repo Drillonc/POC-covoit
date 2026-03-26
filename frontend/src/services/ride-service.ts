@@ -13,6 +13,7 @@ export interface Ride {
   };
   isDriver: boolean;
   joined: boolean;
+  isPassed: boolean;
   passengers: {
     email: string;
     firstName: string;
@@ -61,6 +62,17 @@ export default class RideService {
       headers: this.getAuthHeaders()
     });
     if (!response.ok) throw new Error('Failed to fetch joined rides');
+    return response.json();
+  }
+
+
+  // Méthode pour récupérer les trajets auxquels l'utilisateur a participé et qui sont passés
+  static async getPassedRides(): Promise<Ride[]> {
+    const response = await fetch(`${API_BASE}/rides/passed`, {
+      method: 'GET',
+      headers: this.getAuthHeaders()
+    });
+    if (!response.ok) throw new Error('Failed to fetch passed rides');
     return response.json();
   }
 

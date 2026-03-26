@@ -80,3 +80,12 @@ button:hover {
   display: block;
   margin: auto;
 }
+
+
+.input-field label {
+  transform: none !important;
+  position: static !important;
+  font-size: 0.9rem !important;
+  color: #777 !important;
+  margin-top: 4px;
+}

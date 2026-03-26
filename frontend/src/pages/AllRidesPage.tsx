@@ -92,7 +92,6 @@ export default function AllRidesPage() {
                   setNoResult(false);
                   setSearchCity(city.toLowerCase());
                 }
-                //loadRides();
               }}
               onClear={
                 () => {

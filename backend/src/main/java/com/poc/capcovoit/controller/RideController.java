@@ -55,6 +55,16 @@ public class RideController {
         return ResponseEntity.ok(rides);
     }
 
+    // Endpoint pour récupérer les trajets auxquels un utilisateur a participé et qui sont passés
+    @GetMapping("/passed")
+    public ResponseEntity<List<RideDTO>> getPassedRides(@AuthenticationPrincipal CustomUserDetails user) {
+
+        String email = user.getUsername();
+        List<RideDTO> rides = rideService.getPassedRidesByUser(email);
+
+        return ResponseEntity.ok(rides);
+    } 
+
     // Endpoint pour créer un nouveau trajet
     @PostMapping
     public ResponseEntity<RideDTO> createRide(@RequestBody CreateRideRequest request, @AuthenticationPrincipal CustomUserDetails user) {

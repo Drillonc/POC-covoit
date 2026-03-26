@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /*
  * Nom de classe : RideService
@@ -34,6 +35,7 @@ public class RideService {
     public List<RideDTO> getAllRides(String currentUserEmail) {
         return rideRepository.findAll()
                 .stream()
+                .filter(ride -> ride.getDate().isAfter(LocalDateTime.now()))
                 .map(ride -> toDTO(ride, currentUserEmail))
                 .toList();
     }
@@ -42,8 +44,25 @@ public class RideService {
     public List<RideDTO> getRidesByDriver(String email) {
         return rideRepository.findByDriverEmail(email)
                 .stream()
+                .filter(ride -> ride.getDate().isAfter(LocalDateTime.now()))
                 .map(ride -> toDTO(ride, email))
                 .toList();
+    }
+
+    // Méthode pour récupérer les trajets passés d'un conducteur spécifique, en utilisant l'email du conducteur pour filtrer les trajets
+    public List<RideDTO> getPassedRidesByUser(String email) {
+        Stream<Ride> passedMydrive = rideRepository.findByDriverEmail(email)
+                .stream();
+
+        Stream<Ride> passedJoined = rideRepository.findByParticipantEmail(email)
+                .stream();
+
+        List<RideDTO> passedDTO = Stream.concat(passedMydrive, passedJoined)
+                .filter(ride -> ride.getDate().isBefore(LocalDateTime.now()))
+                .map(ride -> toDTO(ride, email))
+                .toList() ;
+
+        return passedDTO;
     }
 
     // Méthode pour créer un nouveau trajet en associant le conducteur à partir de son email et en sauvegardant le trajet dans la base de données
@@ -161,6 +180,9 @@ public class RideService {
                 })
                 .toList();
 
+        // Booléen pour savoir si le trajet est passé ou à venir en comparant la date du trajet avec la date actuelle
+        dto.isPassed = ride.getDate().isBefore(LocalDateTime.now());
+        
         // Booléen pour savoir si l'utilisateur courant est inscrit au trajet en tant que passager
         dto.joined = modelPassengers
                 .stream()
@@ -173,6 +195,7 @@ public class RideService {
     public List<RideDTO> getRidesByParticipant(String email) {
         return rideRepository.findByParticipantEmail(email)
                 .stream()
+                .filter(ride -> ride.getDate().isAfter(LocalDateTime.now()))
                 .map(ride -> toDTO(ride, email))
                 .toList();
     }

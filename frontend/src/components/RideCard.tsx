@@ -29,15 +29,15 @@ export default function RideCard({
         <span>Passagers : {ride.passengers.map(p => `${p.firstName} ${p.lastName}`).join(', ') || 'Pas encore de passagers'}</span>
         {/* Si on est le conducteur, on affiche un bouton pour supprimer le trajet. Si on est un passager inscrit, on affiche un bouton pour se désinscrire. Sinon, si des places sont disponibles, on affiche un bouton pour s'inscrire. */}
         <div style={{ marginTop: "10px" }}>
-          {ride.isDriver ? (
+          {!ride.isPassed && ride.isDriver ? (
             <button className="btn red" onClick={() => onDelete?.(ride.id)}>
               Supprimer
             </button>
-          ) : ride.joined ? (
+          ) : !ride.isPassed && ride.joined ? (
             <button className="btn orange" onClick={() => onLeave?.(ride.id)}>
               Se désinscrire
             </button>
-          ) : ride.seats > 0 ? (
+          ) : !ride.isPassed  &&ride.seats > 0 ? (
             <button className="btn green" onClick={() => onJoin?.(ride.id)}>
               S’inscrire
             </button>
