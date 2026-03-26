@@ -1,6 +1,9 @@
 import { useState, useEffect, FormEvent } from 'react';
 import RideService, { Ride } from '../services/ride-service';
 import RideCard from '../components/RideCard';
+import { SearchBox } from '@mapbox/search-js-react';
+const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiZHJpbGxvbmMiLCJhIjoiY21uNzl6b2JiMDVwZDJwcXg3M2xzcGFreiJ9.yQoDn2K8TvurkuudA_eKYg';
+
 
 // Page pour afficher les trajets créés par l'utilisateur et les trajets auxquels il est inscrit
 export default function MyRidesPage() {
@@ -38,8 +41,8 @@ export default function MyRidesPage() {
     try {
       await RideService.createRide(start, end, seats, date);
       setShowCreateForm(false);
-      setStart('');
       setEnd('');
+      setStart('');
       setSeats(1);
       setDate('');
       loadRides();
@@ -73,7 +76,7 @@ export default function MyRidesPage() {
           </button>
         </div>
       </div>
-    
+
       {showCreateForm && (
         <div className="row">
           <div className="col s12">
@@ -82,24 +85,41 @@ export default function MyRidesPage() {
               <form onSubmit={handleCreate}>
                 <div className="row">
                   <div className="input-field col s6">
-                    <input
-                      id="start"
-                      type="text"
-                      value={start}
-                      onChange={e => setStart(e.target.value)}
-                      required
+
+                    <SearchBox
+                      accessToken={MAPBOX_ACCESS_TOKEN}
+                      options={{
+                        language: 'fr',
+                        proximity: 'ip'
+                      }}
+
+                      onRetrieve={(res) => {
+                        const feat = res.features[0];
+                        if (!feat || !feat.properties) return;
+                        const formatted = feat.properties?.name + ' ' + feat.properties?.full_address;
+
+                        setStart(formatted);
+                      }}
                     />
-                    <label htmlFor="start">Départ</label>
+
                   </div>
                   <div className="input-field col s6">
-                    <input
-                      id="end"
-                      type="text"
-                      value={end}
-                      onChange={e => setEnd(e.target.value)}
-                      required
+
+                    <SearchBox
+                      accessToken={MAPBOX_ACCESS_TOKEN}
+                      options={{
+                        language: 'fr',
+                        proximity: 'ip'
+                      }}
+                      onRetrieve={(res) => {
+                        const feat = res.features[0];
+                        console.log('SearchBox result:', res);
+                        if (!feat || !feat.properties) return;
+                        const formatted = feat.properties?.name + ', ' + feat.properties?.full_address;
+
+                        setEnd(formatted);
+                      }}
                     />
-                    <label htmlFor="end">Arrivée</label>
                   </div>
                 </div>
 
